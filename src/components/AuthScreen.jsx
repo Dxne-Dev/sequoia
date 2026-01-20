@@ -7,6 +7,7 @@ export default function AuthScreen({ onLogin }) {
     const [isLogin, setIsLogin] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null)
+    const [successMessage, setSuccessMessage] = useState(null)
 
     // Form states
     const [formData, setFormData] = useState({
@@ -27,17 +28,19 @@ export default function AuthScreen({ onLogin }) {
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
         setError(null)
+        setSuccessMessage(null)
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         setIsLoading(true)
         setError(null)
+        setSuccessMessage(null)
 
         try {
-            let user
             if (isLogin) {
-                user = await authService.login(formData.email, formData.password)
+                const user = await authService.login(formData.email, formData.password)
+                onLogin(user)
             } else {
                 // Validation basic
                 if (formData.password !== formData.confirmPassword) {
@@ -47,15 +50,26 @@ export default function AuthScreen({ onLogin }) {
                     throw new Error('Le mot de passe doit faire au moins 6 caractères.')
                 }
 
-                user = await authService.register({
+                await authService.register({
                     firstName: formData.firstName,
                     lastName: formData.lastName,
                     email: formData.email,
-                    password: formData.password, // In real app, never send plain password
+                    password: formData.password,
                     subject: formData.subject
                 })
+
+                // Sign out immediately because Firebase auto-logs in
+                await authService.logout()
+
+                // Switch to login and show success
+                setSuccessMessage('Compte créé avec succès ! Vous pouvez maintenant vous connecter.')
+                setIsLogin(true)
+                setFormData({
+                    ...formData,
+                    password: '',
+                    confirmPassword: ''
+                })
             }
-            onLogin(user)
         } catch (err) {
             setError(err.message)
         } finally {
@@ -84,6 +98,25 @@ export default function AuthScreen({ onLogin }) {
                     <div className="auth-error animate-shake">
                         <AlertCircle size={18} />
                         <span>{error}</span>
+                    </div>
+                )}
+
+                {/* Success Message */}
+                {successMessage && (
+                    <div className="auth-success animate-fade-in" style={{
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        color: '#10b981',
+                        padding: '1rem',
+                        borderRadius: '0.75rem',
+                        marginBottom: '1.5rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.75rem',
+                        fontSize: '0.9rem',
+                        border: '1px solid rgba(16, 185, 129, 0.2)'
+                    }}>
+                        <TreePine size={18} />
+                        <span>{successMessage}</span>
                     </div>
                 )}
 
