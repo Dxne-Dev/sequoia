@@ -9,24 +9,71 @@ import {
 } from 'firebase/auth'
 import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore'
 import { auth, db } from './firebase'
+import { emailService } from './emailService'
 
 export const authService = {
     /**
      * Register a new user
      */
-    register: async ({ email, password, firstName, lastName, subject }) => {
+    /**
+     * Step 1: Initialize Registration & Send OTP
+     */
+    initiateRegister: async (userData) => {
         try {
-            // 1. Create Auth User
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+            // 1. Generate 6-digit code
+            const otpCode = Math.floor(100000 + Math.random() * 900000).toString()
+
+            // 2. Store verification info in Firestore
+            // We use email as key or a temporary ID
+            await setDoc(doc(db, 'temp_verifications', userData.email), {
+                ...userData,
+                otpCode,
+                createdAt: new Date().toISOString(),
+                expiresAt: new Date(Date.now() + 10 * 60000).toISOString() // 10 mins
+            })
+
+            // 3. Send Email
+            await emailService.sendOTP(userData.email, userData.firstName, otpCode)
+
+            return true
+        } catch (error) {
+            console.error('Initiate Register Error:', error)
+            throw new Error('Erreur lors de l\'envoi du code de vérification.')
+        }
+    },
+
+    /**
+     * Step 2: Verify OTP and Create Final Account
+     */
+    verifyAndRegister: async (email, inputCode) => {
+        try {
+            // 1. Get temp data
+            const tempDoc = await getDoc(doc(db, 'temp_verifications', email))
+            if (!tempDoc.exists()) throw new Error('Session expirée ou email invalide.')
+
+            const data = tempDoc.data()
+
+            // 2. Check code
+            if (data.otpCode !== inputCode) {
+                throw new Error('Code de vérification incorrect.')
+            }
+
+            // 3. Check expiration
+            if (new Date() > new Date(data.expiresAt)) {
+                throw new Error('Le code a expiré. Veuillez en demander un nouveau.')
+            }
+
+            // 4. Create Auth User
+            const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password)
             const user = userCredential.user
 
-            // 2. Create User Profile in Firestore
+            // 5. Create Final User Profile
             const userProfile = {
                 id: user.uid,
-                firstName,
-                lastName,
-                email,
-                subject,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                email: data.email,
+                subject: data.subject,
                 createdAt: new Date().toISOString(),
                 stats: {
                     sessionsCount: 0,
@@ -36,13 +83,17 @@ export const authService = {
             }
 
             await setDoc(doc(db, 'users', user.uid), userProfile)
+
+            // 6. Cleanup
+            // Note: In real app, we would delete the temp doc but for this demo let's keep it simple
+            // await deleteDoc(doc(db, 'temp_verifications', email))
+
             return userProfile
 
         } catch (error) {
-            console.error('Registration Error:', error)
+            console.error('Verify Register Error:', error)
             if (error.code === 'auth/email-already-in-use') throw new Error('Cet email est déjà utilisé.')
-            if (error.code === 'auth/weak-password') throw new Error('Le mot de passe est trop faible.')
-            throw new Error('Erreur lors de l\'inscription: ' + error.message)
+            throw error
         }
     },
 

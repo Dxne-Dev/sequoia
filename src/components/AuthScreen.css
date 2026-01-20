@@ -70,6 +70,23 @@
     margin-bottom: var(--space-lg);
 }
 
+.auth-status {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    margin-bottom: var(--space-lg);
+    border: 1px solid transparent;
+}
+
+.auth-status.success {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
 /* Form */
 .auth-form {
     display: flex;
@@ -156,6 +173,46 @@
 .btn-link:hover {
     text-decoration: underline;
     color: var(--color-primary-300);
+}
+
+/* OTP Specific */
+.otp-container {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-xs);
+    margin: var(--space-lg) 0;
+}
+
+.otp-input {
+    width: 45px !important;
+    height: 55px;
+    padding: 0 !important;
+    text-align: center;
+    font-size: 1.5rem !important;
+    font-weight: 700;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--surface-border-subtle);
+    border-radius: var(--radius-lg);
+    color: var(--color-primary-400);
+    transition: all var(--transition-fast);
+}
+
+.otp-input:focus {
+    border-color: var(--color-primary-500) !important;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3) !important;
+    background: var(--bg-secondary) !important;
+    transform: translateY(-2px);
+}
+
+.resend-container {
+    text-align: center;
+    margin-top: var(--space-md);
+}
+
+.resend-container p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-xs);
 }
 
 @keyframes shake {
