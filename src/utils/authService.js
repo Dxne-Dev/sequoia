@@ -78,7 +78,8 @@ export const authService = {
                 stats: {
                     sessionsCount: 0,
                     copiesCount: 0,
-                    timeSavedMinutes: 0
+                    timeSavedMinutes: 0,
+                    processedSessions: [] // Track session IDs already counted in stats
                 }
             }
 
@@ -157,27 +158,59 @@ export const authService = {
 
     /**
      * Update user stats in Firestore
+     * sessionIds: Array of session IDs to mark as processed
      */
-    updateStats: async (userId, count) => {
+    updateStats: async (userId, count, sessionId) => {
         try {
             const userRef = doc(db, 'users', userId)
             const userSnap = await getDoc(userRef)
 
             if (userSnap.exists()) {
-                const currentStats = userSnap.data().stats || { sessionsCount: 0, copiesCount: 0, timeSavedMinutes: 0 }
+                const userData = userSnap.data()
+                const currentStats = userData.stats || {
+                    sessionsCount: 0,
+                    copiesCount: 0,
+                    timeSavedMinutes: 0,
+                    processedSessions: []
+                }
+
+                // SECURITY: If this session was already processed for stats, do nothing
+                if (currentStats.processedSessions && currentStats.processedSessions.includes(sessionId)) {
+                    console.log("Session already processed for stats, skipping update.")
+                    return userData;
+                }
 
                 const newStats = {
-                    sessionsCount: currentStats.sessionsCount + 1,
-                    copiesCount: currentStats.copiesCount + count,
-                    timeSavedMinutes: currentStats.timeSavedMinutes + (count * 5)
+                    ...currentStats,
+                    copiesCount: (currentStats.copiesCount || 0) + count,
+                    timeSavedMinutes: (currentStats.timeSavedMinutes || 0) + (count * 5),
+                    processedSessions: [...(currentStats.processedSessions || []), sessionId]
                 }
 
                 await updateDoc(userRef, { stats: newStats })
-                return { ...userSnap.data(), stats: newStats }
+                return { ...userData, stats: newStats }
             }
         } catch (error) {
             console.error('Error updating stats:', error)
         }
         return null
+    },
+
+    /**
+     * Increment the session count ONLY once per session created
+     */
+    incrementSessionCount: async (userId) => {
+        try {
+            const userRef = doc(db, 'users', userId)
+            const userSnap = await getDoc(userRef)
+            if (userSnap.exists()) {
+                const currentStats = userSnap.data().stats || { sessionsCount: 0 }
+                await updateDoc(userRef, {
+                    'stats.sessionsCount': (currentStats.sessionsCount || 0) + 1
+                })
+            }
+        } catch (error) {
+            console.error('Error incrementing session count:', error)
+        }
     }
 }

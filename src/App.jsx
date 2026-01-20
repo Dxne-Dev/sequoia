@@ -94,6 +94,9 @@ function App() {
       // Note: we update the same session doc
       await sessionService.updateSession(newSession.id, { students: initialStudents })
 
+      // Update session count stat (only once at creation)
+      await authService.incrementSessionCount(user.id)
+
       // Set State
       setCurrentSession(newSession)
       setStudents(initialStudents)
@@ -184,8 +187,8 @@ function App() {
         })
       }
 
-      if (completedCount > 0) {
-        const updatedUser = await authService.updateStats(user.id, completedCount)
+      if (completedCount > 0 && currentSession) {
+        const updatedUser = await authService.updateStats(user.id, completedCount, currentSession.id)
         if (updatedUser) setUser(updatedUser)
       }
 
