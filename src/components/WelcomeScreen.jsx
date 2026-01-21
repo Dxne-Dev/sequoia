@@ -77,7 +77,7 @@ export default function WelcomeScreen({ user, userSessions, onStart, onResume, o
                     <h1 className="welcome-greeting">
                         {getGreeting()} <span className="highlight">{user.firstName}</span>,
                     </h1>
-                    <h2 className="welcome-subtitle">Prêt à libérer votre soirée ?</h2>
+                    <h2 className="welcome-subtitle">Redonnez du souffle à votre pédagogie.</h2>
 
                     <button
                         className="btn btn-primary btn-lg welcome-cta"

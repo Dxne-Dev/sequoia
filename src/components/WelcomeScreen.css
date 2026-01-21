@@ -1,10 +1,8 @@
-/* Welcome Screen Styles */
 .welcome-screen {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.05), transparent 40%),
-        radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.05), transparent 40%);
+    background: var(--bg-primary);
 }
 
 .welcome-content {
@@ -25,36 +23,39 @@
 }
 
 .welcome-greeting {
-    font-size: 2.5rem;
-    font-weight: 800;
-    margin-bottom: var(--space-md);
-    color: var(--text-primary);
-    letter-spacing: -0.02em;
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: var(--space-xs);
+    color: var(--color-primary-900);
+    letter-spacing: -0.01em;
 }
 
 .highlight {
-    background: linear-gradient(120deg, var(--color-primary-400), var(--color-primary-600));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--color-primary-600);
 }
 
 .welcome-subtitle {
-    font-size: 1.25rem;
-    color: var(--text-muted);
-    font-weight: 400;
-    margin-bottom: var(--space-xl);
+    font-size: 1.4rem;
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-primary-800);
+    margin-bottom: var(--space-2xl);
+    opacity: 0.9;
 }
 
 .welcome-cta {
-    padding: var(--space-lg) var(--space-2xl);
-    font-size: 1.125rem;
-    box-shadow: var(--shadow-lg), 0 0 20px rgba(16, 185, 129, 0.2);
-    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+    padding: var(--space-lg) var(--space-3xl);
+    font-size: 1.2rem;
+    border-radius: var(--radius-xl);
+    background: var(--color-primary-900);
+    box-shadow: var(--shadow-lg);
 }
 
 .welcome-cta:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: var(--shadow-xl), 0 0 30px rgba(16, 185, 129, 0.3);
+    transform: translateY(-2px);
+    background: var(--color-primary-800);
+    box-shadow: var(--shadow-xl);
 }
 
 /* Stats Section */
@@ -62,13 +63,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: var(--space-xl);
-    padding: var(--space-lg);
-    background: var(--surface-glass);
-    border: 1px solid var(--surface-border-subtle);
+    gap: var(--space-3xl);
+    padding: var(--space-lg) var(--space-2xl);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--surface-border);
     border-radius: var(--radius-xl);
-    backdrop-filter: blur(10px);
     margin: 0 auto;
+    box-shadow: var(--shadow-sm);
 }
 
 .stat {
@@ -78,14 +79,14 @@
 }
 
 .stat-icon-wrapper {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-full);
-    color: var(--color-primary-500);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    color: var(--accent-ocre);
 }
 
 .stat-info {
@@ -139,25 +140,24 @@
 }
 
 .tab-btn.active {
-    color: var(--color-primary-500);
-    background: var(--color-primary-500-10);
+    color: var(--color-primary-900);
+    background: var(--bg-secondary);
 }
 
 .tab-btn.active::after {
     content: '';
     position: absolute;
     bottom: -9px;
-    /* Align with border-bottom of container */
     left: 0;
     width: 100%;
-    height: 2px;
-    background: var(--color-primary-500);
-    border-radius: 2px 2px 0 0;
+    height: 3px;
+    background: var(--color-primary-900);
+    border-radius: 4px 4px 0 0;
 }
 
 .tab-btn:hover:not(.active) {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
+    background: white;
+    color: var(--color-primary-900);
 }
 
 .empty-tab-message {
@@ -187,19 +187,20 @@
 }
 
 .session-card {
-    background: var(--surface-card);
+    background: white;
     border: 1px solid var(--surface-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-lg);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all var(--transition-base);
     position: relative;
     overflow: hidden;
+    box-shadow: var(--shadow-sm);
 }
 
 .session-card:hover {
-    transform: translateY(-2px);
-    border-color: var(--color-primary-500);
+    transform: translateY(-4px);
+    border-color: var(--color-primary-900);
     box-shadow: var(--shadow-md);
 }
 

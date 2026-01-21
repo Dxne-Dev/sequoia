@@ -79,9 +79,9 @@ export default function ResultsScreen({ session, students, onNewSession, onBackT
             const labelWidth = (pageWidth - margin * 3) / 2
             const labelHeight = 70 // Slightly taller for better layout
 
-            // Colors
-            const colorPrimary = [16, 185, 129] // Emerald 500
-            const colorText = [31, 41, 55] // Gray 800
+            // Colors (Modern Library Theme)
+            const colorPrimary = [6, 78, 59] // Vert Séquoia #064E3B
+            const colorText = [31, 41, 55] // Gris Ardoise #1F2937
             const colorMuted = [107, 114, 128] // Gray 500
 
             let x = margin
@@ -102,7 +102,7 @@ export default function ResultsScreen({ session, students, onNewSession, onBackT
             // Subtitle
             doc.setFontSize(14)
             doc.setFont('helvetica', 'normal')
-            doc.text('Assistant de Correction Pédagogique', pageWidth / 2, 35, { align: 'center' })
+            doc.text('Redonnez du souffle à votre pédagogie.', pageWidth / 2, 35, { align: 'center' })
 
             // Session Info Box
             doc.setFillColor(255, 255, 255)
@@ -154,7 +154,7 @@ export default function ResultsScreen({ session, students, onNewSession, onBackT
                 doc.setLineWidth(0.5)
                 doc.roundedRect(x, y, labelWidth, labelHeight, 2, 2, 'S')
 
-                // 2. Header Strip (Emerald)
+                // 2. Header Strip (Vert Séquoia)
                 doc.setFillColor(...colorPrimary)
                 doc.rect(x + 0.5, y + 0.5, labelWidth - 1, 14, 'F')
 
@@ -245,9 +245,9 @@ export default function ResultsScreen({ session, students, onNewSession, onBackT
             const pageWidth = doc.internal.pageSize.getWidth()
 
             // Title
-            doc.setFontSize(20)
-            doc.setTextColor(16, 185, 129)
-            doc.text('Sequoia - Recapitulatif des Notes', pageWidth / 2, 20, { align: 'center' })
+            doc.setFontSize(22)
+            doc.setTextColor(6, 78, 59)
+            doc.text('Séquoia - Récapitulatif des Notes', pageWidth / 2, 20, { align: 'center' })
 
             doc.setFontSize(12)
             doc.setTextColor(100, 100, 100)
@@ -269,7 +269,7 @@ export default function ResultsScreen({ session, students, onNewSession, onBackT
                 startY: 35,
                 theme: 'grid',
                 headStyles: {
-                    fillColor: [16, 185, 129],
+                    fillColor: [6, 78, 59],
                     textColor: [255, 255, 255],
                     fontStyle: 'bold',
                     halign: 'center'
