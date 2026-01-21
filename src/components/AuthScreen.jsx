@@ -130,9 +130,8 @@ export default function AuthScreen({ onLogin }) {
                         {view === 'register' && 'Rejoindre Séquoia'}
                         {view === 'verify' && 'Vérification'}
                     </h1>
-                    <p className="auth-baseline">Redonnez du souffle à votre pédagogie.</p>
                     <p className="auth-subtitle">
-                        {view === 'login' && 'Prêt à libérer votre soirée ?'}
+                        {view === 'login' && 'Prêt à corriger plus efficacement ?'}
                         {view === 'register' && 'Créez votre compte pour transformer votre correction.'}
                         {view === 'verify' && `Entrez le code envoyé à ${formData.email}`}
                     </p>
