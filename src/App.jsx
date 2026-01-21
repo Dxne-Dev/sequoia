@@ -74,6 +74,7 @@ function App() {
 
   // Create a new fresh session
   const handleSessionCreate = async (sessionConfig) => {
+    if (isLoading) return
     setIsLoading(true)
     try {
       // Create in Firestore

@@ -44,6 +44,7 @@ export default function SessionSetup({ onSessionCreate, onBack }) {
     const [criteria, setCriteria] = useState([])
     const [maxGrade, setMaxGrade] = useState(20)
     const [studentCount, setStudentCount] = useState(10)
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     // Add a new criterion
     const addCriterion = useCallback(() => {
@@ -80,12 +81,13 @@ export default function SessionSetup({ onSessionCreate, onBack }) {
 
     // Validate and create session
     const handleCreateSession = () => {
-        if (criteria.length < 2 || criteria.some(c => !c.name.trim())) {
+        if (isSubmitting || criteria.length < 2 || criteria.some(c => !c.name.trim())) {
             return
         }
 
+        setIsSubmitting(true)
         onSessionCreate({
-            name: sessionName || `Session du ${new Date().toLocaleDateString('fr-FR')}`,
+            name: sessionName.trim() || `Session du ${new Date().toLocaleDateString('fr-FR')}`,
             criteria: criteria,
             maxGrade: maxGrade,
             studentCount: studentCount,
@@ -292,11 +294,11 @@ export default function SessionSetup({ onSessionCreate, onBack }) {
                         </button>
                         <button
                             className="btn btn-primary btn-lg"
-                            disabled={criteria.length < 2 || criteria.some(c => !c.name.trim())}
+                            disabled={isSubmitting || criteria.length < 2 || criteria.some(c => !c.name.trim())}
                             onClick={handleCreateSession}
                         >
-                            <Rocket size={18} />
-                            <span>Démarrer la correction</span>
+                            <Rocket size={18} className={isSubmitting ? 'animate-pulse' : ''} />
+                            <span>{isSubmitting ? 'Création...' : 'Démarrer la correction'}</span>
                         </button>
                     </div>
                 </div>
