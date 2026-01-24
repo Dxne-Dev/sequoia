@@ -25,13 +25,34 @@ export default function AuthScreen({ onLogin }) {
 
     const subjects = [
         'Français', 'Philosophie', 'Histoire-Géo', 'Anglais',
-        'Espagnol', 'SES', 'Mathématiques', 'SVT', 'Physique-Chimie'
+        'Espagnol', 'SES', 'Mathématiques', 'SVT', 'Physique-Chimie',
+        'Autre...'
     ]
 
+    const [customSubject, setCustomSubject] = useState('')
+    const [showCustomSubject, setShowCustomSubject] = useState(false)
+
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value })
+        const { name, value } = e.target
+        if (name === 'subject') {
+            if (value === 'Autre...') {
+                setShowCustomSubject(true)
+                setFormData({ ...formData, subject: '' }) // Reset to empty to force user to type
+            } else {
+                setShowCustomSubject(false)
+                setFormData({ ...formData, subject: value })
+            }
+        } else {
+            setFormData({ ...formData, [name]: value })
+        }
         setError(null)
         setSuccessMessage(null)
+    }
+
+    const handleCustomSubjectChange = (e) => {
+        const val = e.target.value
+        setCustomSubject(val)
+        setFormData({ ...formData, subject: val })
     }
 
     const handleOtpChange = (index, value) => {
@@ -195,21 +216,37 @@ export default function AuthScreen({ onLogin }) {
                         </div>
 
                         {view === 'register' && (
-                            <div className="input-field">
-                                <BookOpen size={18} className="input-icon" />
-                                <select
-                                    name="subject"
-                                    required
-                                    value={formData.subject}
-                                    onChange={handleChange}
-                                    className={!formData.subject ? 'placeholder-color' : ''}
-                                >
-                                    <option value="" disabled>Matière enseignée</option>
-                                    {subjects.map(s => (
-                                        <option key={s} value={s}>{s}</option>
-                                    ))}
-                                </select>
-                            </div>
+                            <>
+                                <div className="input-field">
+                                    <BookOpen size={18} className="input-icon" />
+                                    <select
+                                        name="subject"
+                                        required
+                                        value={showCustomSubject ? 'Autre...' : formData.subject}
+                                        onChange={handleChange}
+                                        className={!formData.subject && !showCustomSubject ? 'placeholder-color' : ''}
+                                    >
+                                        <option value="" disabled>Matière enseignée</option>
+                                        {subjects.map(s => (
+                                            <option key={s} value={s}>{s}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                {showCustomSubject && (
+                                    <div className="input-field animate-fade-in">
+                                        <Plus size={18} className="input-icon" />
+                                        <input
+                                            type="text"
+                                            placeholder="Nom de votre matière"
+                                            required
+                                            value={customSubject}
+                                            onChange={handleCustomSubjectChange}
+                                            autoFocus
+                                        />
+                                    </div>
+                                )}
+                            </>
                         )}
 
                         <div className="input-field">
@@ -299,6 +336,8 @@ export default function AuthScreen({ onLogin }) {
                                     setView(view === 'login' ? 'register' : 'login')
                                     setError(null)
                                     setSuccessMessage(null)
+                                    setShowCustomSubject(false)
+                                    setCustomSubject('')
                                 }}
                             >
                                 {view === 'login' ? "S'inscrire" : 'Se connecter'}
