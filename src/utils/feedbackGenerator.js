@@ -282,7 +282,9 @@ export function checkCoherence(scores, calculatedGrade, maxGrade) {
     const scoreValues = Object.values(scores)
     if (scoreValues.length === 0) return null
 
-    const avgScore = scoreValues.reduce((a, b) => a + b, 0) / scoreValues.length
+    // Normalize avgScore to a 20-point scale for comparison
+    const rawAvg = scoreValues.reduce((a, b) => a + b, 0) / scoreValues.length
+    const avgScore = (rawAvg / maxGrade) * 20
 
     // Check for significant discrepancy
     const scoreDiff = Math.abs(avgScore - normalizedGrade)
@@ -295,9 +297,9 @@ export function checkCoherence(scores, calculatedGrade, maxGrade) {
         }
     }
 
-    // Check for extreme cases
-    const highScores = scoreValues.filter(s => s >= 16).length
-    const lowScores = scoreValues.filter(s => s < 8).length
+    // Check for extreme cases using normalized values
+    const highScores = scoreValues.filter(s => (s / maxGrade) * 20 >= 16).length
+    const lowScores = scoreValues.filter(s => (s / maxGrade) * 20 < 8).length
 
     if (highScores > scoreValues.length * 0.7 && normalizedGrade < 12) {
         return "La majorité des critères sont 'Excellent' mais la note reste modeste."
