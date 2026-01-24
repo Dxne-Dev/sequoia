@@ -82,6 +82,7 @@ export default function WelcomeScreen({ user, userSessions, onStart, onResume, o
                     <button
                         className="btn btn-primary btn-lg welcome-cta"
                         onClick={onStart}
+                        data-tour="welcome_cta"
                     >
                         <span>Commencer un nouveau paquet</span>
                         <ArrowRight size={20} />

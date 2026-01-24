@@ -495,6 +495,7 @@ export default function GradingInterface({ session, students, onStudentUpdate, o
                                 className={`btn ${isRecording ? 'btn-recording' : 'btn-secondary'} ${isTranscribing ? 'btn-transcribing' : ''}`}
                                 onClick={toggleRecording}
                                 disabled={isTranscribing}
+                                data-tour="voice_grading"
                             >
                                 {isTranscribing ? (
                                     <>

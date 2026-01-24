@@ -352,7 +352,7 @@ export default function ResultsScreen({ session, students, onNewSession, onBackT
             <main className="results-main">
                 {/* Statistics Panel */}
                 {stats && (
-                    <section className="stats-section animate-fade-in-up">
+                    <section className="stats-section animate-fade-in-up" data-tour="results_summary">
                         <div className="section-header">
                             <BarChart3 size={22} />
                             <h2>Statistiques de la session</h2>

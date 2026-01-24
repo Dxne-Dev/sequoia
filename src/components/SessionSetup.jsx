@@ -132,7 +132,7 @@ export default function SessionSetup({ onSessionCreate, onBack }) {
                     </div>
 
                     <div className="setup-form">
-                        <div className="input-group">
+                        <div className="input-group" data-tour="setup_config">
                             <label className="input-label">Nom de la session (optionnel)</label>
                             <input
                                 type="text"
@@ -179,7 +179,7 @@ export default function SessionSetup({ onSessionCreate, onBack }) {
                             </div>
                         </div>
 
-                        <div className="input-group">
+                        <div className="input-group" data-tour="setup_presets">
                             <label className="input-label">Type d'évaluation</label>
                             <div className="preset-grid">
                                 {Object.entries(PRESET_LABELS).map(([key, { icon: Icon, label }]) => (

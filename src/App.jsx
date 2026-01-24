@@ -7,6 +7,8 @@ import AuthScreen from './components/AuthScreen'
 import AdminDashboard from './components/AdminDashboard'
 import { authService } from './utils/authService'
 import { sessionService } from './utils/sessionService'
+import { OnboardingProvider, useOnboarding } from './utils/OnboardingContext'
+import TourGuide from './components/TourGuide'
 import './App.css'
 
 function App() {
@@ -16,6 +18,30 @@ function App() {
   const [students, setStudents] = useState([])
   const [userSessions, setUserSessions] = useState([]) // Sessions saved in DB
   const [isLoading, setIsLoading] = useState(true)
+
+  return (
+    <OnboardingProvider>
+      <AppContent
+        user={user} setUser={setUser}
+        currentScreen={currentScreen} setCurrentScreen={setCurrentScreen}
+        currentSession={currentSession} setCurrentSession={setCurrentSession}
+        students={students} setStudents={setStudents}
+        userSessions={userSessions} setUserSessions={setUserSessions}
+        isLoading={isLoading} setIsLoading={setIsLoading}
+      />
+    </OnboardingProvider>
+  )
+}
+
+function AppContent({
+  user, setUser,
+  currentScreen, setCurrentScreen,
+  currentSession, setCurrentSession,
+  students, setStudents,
+  userSessions, setUserSessions,
+  isLoading, setIsLoading
+}) {
+  const { startTour, hasSeenTutorial } = useOnboarding()
 
   // Check auth and load sessions on load
   useEffect(() => {
@@ -68,6 +94,14 @@ function App() {
     } else {
       await loadUserSessions(userData.id)
       setCurrentScreen('welcome')
+
+      // Auto-start tour if it's a first-time user
+      // We check if they have sessions, if 0 it's likely a new user
+      const sessions = await sessionService.getUserSessions(userData.id)
+      if (sessions.length === 0 && !hasSeenTutorial) {
+        // Small delay to let the welcome screen mount
+        setTimeout(() => startTour(), 1000)
+      }
     }
   }
 
@@ -239,6 +273,8 @@ function App() {
       <div className="ambient-light"></div>
 
       {isLoading && user && <LoadingOverlay />}
+
+      <TourGuide />
 
       {!user ? (
         <AuthScreen onLogin={handleLogin} />
