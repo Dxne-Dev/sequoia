@@ -4,7 +4,7 @@ import { X, ChevronRight, ChevronLeft, Volume2 } from 'lucide-react';
 import './TourGuide.css';
 
 export default function TourGuide() {
-    const { isActive, currentStep, steps, nextStep, prevStep, stopTour } = useOnboarding();
+    const { isActive, currentStep, steps, nextStep, prevStep, stopTour, completeTour } = useOnboarding();
     const [spotlightStyle, setSpotlightStyle] = useState({});
     const [cardStyle, setCardStyle] = useState({});
     const step = steps[currentStep];
@@ -112,16 +112,26 @@ export default function TourGuide() {
                         ))}
                     </div>
                     <div className="tour-nav">
-                        {currentStep > 0 && (
+                        {currentStep > 0 && steps[currentStep - 1].screen === steps[currentStep].screen && (
                             <button className="btn-tour-prev" onClick={prevStep}>
                                 <ChevronLeft size={18} />
                                 <span>Précédent</span>
                             </button>
                         )}
-                        <button className="btn-tour-next" onClick={nextStep}>
-                            <span>{currentStep === steps.length - 1 ? 'Terminer' : 'Suivant'}</span>
-                            <ChevronRight size={18} />
-                        </button>
+
+                        {currentStep === steps.length - 1 ? (
+                            <button className="btn-tour-next" onClick={completeTour}>
+                                <span>Terminer</span>
+                                <ChevronRight size={18} />
+                            </button>
+                        ) : (
+                            steps[currentStep + 1].screen === steps[currentStep].screen && (
+                                <button className="btn-tour-next" onClick={nextStep}>
+                                    <span>Suivant</span>
+                                    <ChevronRight size={18} />
+                                </button>
+                            )
+                        )}
                     </div>
                 </div>
             </div>

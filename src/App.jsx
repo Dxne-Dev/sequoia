@@ -41,7 +41,12 @@ function AppContent({
   userSessions, setUserSessions,
   isLoading, setIsLoading
 }) {
-  const { startTour, hasSeenTutorial } = useOnboarding()
+  const { startTour, hasSeenTutorial, setCurrentScreen: setOnboardingScreen } = useOnboarding()
+
+  // Sync screen state with onboarding context
+  useEffect(() => {
+    setOnboardingScreen(currentScreen)
+  }, [currentScreen, setOnboardingScreen])
 
   // Check auth and load sessions on load
   useEffect(() => {

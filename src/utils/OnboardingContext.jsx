@@ -60,6 +60,8 @@ export const OnboardingProvider = ({ children }) => {
         }
     ];
 
+    const [currentScreen, setCurrentScreen] = useState('welcome');
+
     const speak = useCallback((text) => {
         // Cancel existing speech
         window.speechSynthesis.cancel();
@@ -71,11 +73,29 @@ export const OnboardingProvider = ({ children }) => {
         window.speechSynthesis.speak(utterance);
     }, []);
 
+    // Sync current step when screen changes
+    useEffect(() => {
+        if (!isActive) return;
+
+        const stepForScreen = steps.findIndex(s => s.screen === currentScreen);
+        if (stepForScreen !== -1 && steps[currentStep].screen !== currentScreen) {
+            setCurrentStep(stepForScreen);
+            // Delay slightly to ensure screen transition completed before speaking
+            const timer = setTimeout(() => {
+                speak(steps[stepForScreen].vocal);
+            }, 500);
+            return () => clearTimeout(timer);
+        }
+    }, [currentScreen, isActive, steps, currentStep, speak]);
+
     const startTour = useCallback(() => {
         setIsActive(true);
-        setCurrentStep(0);
-        speak(steps[0].vocal);
-    }, [speak, steps]);
+        // Find first step for current screen
+        const firstStepIdx = steps.findIndex(s => s.screen === currentScreen);
+        const idx = firstStepIdx !== -1 ? firstStepIdx : 0;
+        setCurrentStep(idx);
+        speak(steps[idx].vocal);
+    }, [speak, steps, currentScreen]);
 
     const stopTour = useCallback(() => {
         setIsActive(false);
@@ -92,20 +112,27 @@ export const OnboardingProvider = ({ children }) => {
     const nextStep = useCallback(() => {
         if (currentStep < steps.length - 1) {
             const nextIdx = currentStep + 1;
-            setCurrentStep(nextIdx);
-            speak(steps[nextIdx].vocal);
+            // If the next step is on a different screen, we don't force jump 
+            // because the user needs to perform an action to get there.
+            // But we can check if it's the same screen.
+            if (steps[nextIdx].screen === currentScreen) {
+                setCurrentStep(nextIdx);
+                speak(steps[nextIdx].vocal);
+            }
         } else {
             completeTour();
         }
-    }, [currentStep, steps, speak, completeTour]);
+    }, [currentStep, steps, speak, completeTour, currentScreen]);
 
     const prevStep = useCallback(() => {
         if (currentStep > 0) {
             const prevIdx = currentStep - 1;
-            setCurrentStep(prevIdx);
-            speak(steps[prevIdx].vocal);
+            if (steps[prevIdx].screen === currentScreen) {
+                setCurrentStep(prevIdx);
+                speak(steps[prevIdx].vocal);
+            }
         }
-    }, [currentStep, steps, speak]);
+    }, [currentStep, steps, speak, currentScreen]);
 
     return (
         <OnboardingContext.Provider value={{
@@ -113,6 +140,8 @@ export const OnboardingProvider = ({ children }) => {
             currentStep,
             steps,
             hasSeenTutorial,
+            currentScreen,
+            setCurrentScreen,
             startTour,
             stopTour,
             nextStep,
