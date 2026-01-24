@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { TreePine, Mail, Lock, User, ArrowRight, BookOpen, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { TreePine, Mail, Lock, User, ArrowRight, BookOpen, Loader2, AlertCircle, CheckCircle2, Plus } from 'lucide-react'
 import { authService } from '../utils/authService'
 import './AuthScreen.css'
 
@@ -26,7 +26,7 @@ export default function AuthScreen({ onLogin }) {
     const subjects = [
         'Français', 'Philosophie', 'Histoire-Géo', 'Anglais',
         'Espagnol', 'SES', 'Mathématiques', 'SVT', 'Physique-Chimie',
-        'Autre...'
+        'Saisissez votre matière'
     ]
 
     const [customSubject, setCustomSubject] = useState('')
@@ -35,7 +35,7 @@ export default function AuthScreen({ onLogin }) {
     const handleChange = (e) => {
         const { name, value } = e.target
         if (name === 'subject') {
-            if (value === 'Autre...') {
+            if (value === 'Saisissez votre matière') {
                 setShowCustomSubject(true)
                 setFormData({ ...formData, subject: '' }) // Reset to empty to force user to type
             } else {
@@ -222,7 +222,7 @@ export default function AuthScreen({ onLogin }) {
                                     <select
                                         name="subject"
                                         required
-                                        value={showCustomSubject ? 'Autre...' : formData.subject}
+                                        value={showCustomSubject ? 'Saisissez votre matière' : formData.subject}
                                         onChange={handleChange}
                                         className={!formData.subject && !showCustomSubject ? 'placeholder-color' : ''}
                                     >

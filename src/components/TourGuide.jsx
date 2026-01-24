@@ -88,12 +88,6 @@ export default function TourGuide() {
 
     return (
         <div className="tour-overlay">
-            {/* Spotlight Hole */}
-            <div className="tour-spotlight" style={spotlightStyle}></div>
-
-            {/* Backdrop with hole logic (CSS handled) */}
-            <div className="tour-backdrop" onClick={stopTour}></div>
-
             {/* Instruction Card */}
             <div className="tour-card animate-fade-in-scale" style={cardStyle} ref={cardRef}>
                 <div className="tour-card-header">
