@@ -4,6 +4,7 @@ import SessionSetup from './components/SessionSetup'
 import GradingInterface from './components/GradingInterface'
 import ResultsScreen from './components/ResultsScreen'
 import AuthScreen from './components/AuthScreen'
+import AdminDashboard from './components/AdminDashboard'
 import { authService } from './utils/authService'
 import { sessionService } from './utils/sessionService'
 import './App.css'
@@ -28,11 +29,18 @@ function App() {
         // Race between Auth/DB load and Timeout
         await Promise.race([
           (async () => {
+            // Seed admin if needed
+            await authService.ensureAdminExists()
+
             const savedUser = await authService.getCurrentUser()
             if (savedUser) {
               setUser(savedUser)
-              await loadUserSessions(savedUser.id)
-              setCurrentScreen('welcome')
+              if (savedUser.isAdmin) {
+                setCurrentScreen('admin')
+              } else {
+                await loadUserSessions(savedUser.id)
+                setCurrentScreen('welcome')
+              }
             }
           })(),
           timeoutPromise
@@ -55,8 +63,12 @@ function App() {
 
   const handleLogin = async (userData) => {
     setUser(userData)
-    await loadUserSessions(userData.id)
-    setCurrentScreen('welcome')
+    if (userData.isAdmin) {
+      setCurrentScreen('admin')
+    } else {
+      await loadUserSessions(userData.id)
+      setCurrentScreen('welcome')
+    }
   }
 
   const handleLogout = async () => {
@@ -239,6 +251,7 @@ function App() {
               onStart={startNewSession}
               onResume={handleResumeSession}
               onDelete={handleDeleteSession}
+              onOpenAdmin={() => setCurrentScreen('admin')}
             />
           )}
 
@@ -275,6 +288,13 @@ function App() {
               }}
               onArchiveSession={handleArchiveSession}
               onBackToGrading={() => setCurrentScreen('grading')}
+              onLogout={handleLogout}
+            />
+          )}
+
+          {currentScreen === 'admin' && (
+            <AdminDashboard
+              onBack={() => setCurrentScreen('welcome')}
               onLogout={handleLogout}
             />
           )}

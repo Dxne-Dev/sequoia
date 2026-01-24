@@ -110,7 +110,8 @@ export const authService = {
             const userDoc = await getDoc(doc(db, 'users', user.uid))
 
             if (userDoc.exists()) {
-                return userDoc.data()
+                const userData = userDoc.data()
+                return userData
             } else {
                 // Fallback if profile missing (should not happen)
                 return {
@@ -147,7 +148,12 @@ export const authService = {
             const unsubscribe = onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     const userDoc = await getDoc(doc(db, 'users', user.uid))
-                    resolve(userDoc.exists() ? userDoc.data() : null)
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data()
+                        resolve(userData)
+                    } else {
+                        resolve(null)
+                    }
                 } else {
                     resolve(null)
                 }
@@ -211,6 +217,49 @@ export const authService = {
             }
         } catch (error) {
             console.error('Error incrementing session count:', error)
+        }
+    },
+
+    /**
+     * Seed Admin User
+     * Creates the admin account if it doesn't exist
+     */
+    ensureAdminExists: async () => {
+        const adminEmail = "admin@sequoia.com"
+        const adminPassword = "Sequoia2024Admin!"
+
+        try {
+            // Check if user document exists in Firestore first (less intrusive than login)
+            const q = await getDoc(doc(db, 'users', 'admin_user_id')) // This is just a placeholder check
+
+            await createUserWithEmailAndPassword(auth, adminEmail, adminPassword)
+                .then(async (userCredential) => {
+                    const user = userCredential.user
+                    console.log("Creating Admin Account...")
+                    // Set admin data in Firestore
+                    await setDoc(doc(db, 'users', user.uid), {
+                        id: user.uid,
+                        email: adminEmail,
+                        firstName: "Admin",
+                        lastName: "Sequoia",
+                        role: "admin",
+                        isAdmin: true,
+                        createdAt: new Date().toISOString(),
+                        stats: { sessionsCount: 0, copiesCount: 0, timeSavedMinutes: 0 }
+                    })
+                    console.log("Admin account created successfully: ", adminEmail)
+                    await signOut(auth)
+                })
+                .catch((error) => {
+                    if (error.code === 'auth/email-already-in-use') {
+                        console.log("Admin account already exists.")
+                    } else {
+                        console.error("Error ensuring admin exists:", error)
+                    }
+                })
+
+        } catch (error) {
+            console.error("Ensure Admin Error:", error)
         }
     }
 }

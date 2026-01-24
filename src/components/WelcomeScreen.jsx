@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { TreePine, ArrowRight, Clock, FileText, User, CheckCircle2, ChevronRight, Archive, Calendar, Trash2, FolderPen, FolderCheck } from 'lucide-react'
 import './WelcomeScreen.css'
 
-export default function WelcomeScreen({ user, userSessions, onStart, onResume, onDelete }) {
+export default function WelcomeScreen({ user, userSessions, onStart, onResume, onDelete, onOpenAdmin }) {
     const [showToast, setShowToast] = useState(false)
     const [activeTab, setActiveTab] = useState('active') // 'active' or 'archived'
 
@@ -197,6 +197,11 @@ export default function WelcomeScreen({ user, userSessions, onStart, onResume, o
             {/* Footer */}
             <footer className="welcome-footer">
                 <p>Séquoia v1.0 • Conçu pour les enseignants</p>
+                {user.isAdmin && (
+                    <button onClick={onOpenAdmin} className="admin-link-btn">
+                        Admin Dashboard
+                    </button>
+                )}
             </footer>
         </div>
     )

@@ -370,6 +370,24 @@
     color: var(--text-primary);
 }
 
+
 .toast-icon-success {
     color: var(--color-primary-500);
+}
+
+.admin-link-btn {
+    background: none;
+    border: none;
+    color: var(--text-disabled);
+    font-size: 0.75rem;
+    cursor: pointer;
+    margin-left: 1rem;
+    text-decoration: underline;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.admin-link-btn:hover {
+    opacity: 1;
+    color: var(--text-primary);
 }
