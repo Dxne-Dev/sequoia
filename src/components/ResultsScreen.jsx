@@ -258,7 +258,7 @@ export default function ResultsScreen({ session, students, onNewSession, onBackT
             const tableData = students.filter(s => s.isCompleted).map((student, index) => [
                 String(index + 1),
                 student.name,
-                ...session.criteria.map(c => `${student.scores[c.id] || 0}/20`),
+                ...session.criteria.map(c => `${student.scores[c.id] || 0}/${session.maxGrade}`),
                 `${student.finalGrade}/${session.maxGrade}`
             ])
 
@@ -438,10 +438,10 @@ export default function ResultsScreen({ session, students, onNewSession, onBackT
                                 )}
                             </div>
                             <div className="distribution-legend">
-                                <span className="legend-item"><span className="legend-color excellent"></span> Excellent (≥16)</span>
-                                <span className="legend-item"><span className="legend-color good"></span> Bien (12-15)</span>
-                                <span className="legend-item"><span className="legend-color average"></span> Moyen (8-11)</span>
-                                <span className="legend-item"><span className="legend-color below"></span> Insuffisant (&lt;8)</span>
+                                <span className="legend-item"><span className="legend-color excellent"></span> Excellent (≥{Math.round(session.maxGrade * 0.8)})</span>
+                                <span className="legend-item"><span className="legend-color good"></span> Bien ({Math.round(session.maxGrade * 0.6)}-{Math.round(session.maxGrade * 0.8) - 0.5})</span>
+                                <span className="legend-item"><span className="legend-color average"></span> Moyen ({Math.round(session.maxGrade * 0.4)}-{Math.round(session.maxGrade * 0.6) - 0.5})</span>
+                                <span className="legend-item"><span className="legend-color below"></span> Insuffisant (&lt;{Math.round(session.maxGrade * 0.4)})</span>
                             </div>
                         </div>
                     </section>
@@ -578,7 +578,7 @@ export default function ResultsScreen({ session, students, onNewSession, onBackT
                                     {session.criteria.map(c => (
                                         <div key={c.id} className="criterion-mini">
                                             <span className="c-name">{c.name}</span>
-                                            <span className="c-score">{selectedStudent.scores ? (selectedStudent.scores[c.id] || 0) : 0}/{20}</span>
+                                            <span className="c-score">{selectedStudent.scores ? (selectedStudent.scores[c.id] || 0) : 0}/{session.maxGrade}</span>
                                         </div>
                                     ))}
                                 </div>

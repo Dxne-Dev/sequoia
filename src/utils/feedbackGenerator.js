@@ -195,9 +195,10 @@ function getPerformanceLevel(score) {
 /**
  * Get criterion level (high/medium/low) based on score
  */
-function getCriterionLevel(score) {
-    if (score >= 14) return 'high'
-    if (score >= 8) return 'medium'
+function getCriterionLevel(score, maxGrade = 20) {
+    const normalized = (score / maxGrade) * 20
+    if (normalized >= 14) return 'high'
+    if (normalized >= 8) return 'medium'
     return 'low'
 }
 
@@ -224,7 +225,8 @@ export function generateFeedback(criteria, scores, voiceNote, calculatedGrade, m
     const criteriaFeedback = []
     criteria.forEach(criterion => {
         const score = scores[criterion.id] || 0
-        const criterionLevel = getCriterionLevel(score)
+        const criterionMax = criterion.maxScore || maxGrade || 20
+        const criterionLevel = getCriterionLevel(score, criterionMax)
         const criterionId = criterion.id.toLowerCase().replace(/[^a-z]/g, '')
 
         // Find matching criterion feedback

@@ -9,23 +9,23 @@ import './SessionSetup.css'
 // Preset criteria templates
 const CRITERIA_PRESETS = {
     dissertation: [
-        { id: 'intro', name: 'Introduction', weight: 3, maxScore: 20 },
-        { id: 'fond', name: 'Fond / Argumentation', weight: 5, maxScore: 20 },
-        { id: 'forme', name: 'Forme / Rédaction', weight: 3, maxScore: 20 },
-        { id: 'conclusion', name: 'Conclusion', weight: 2, maxScore: 20 },
-        { id: 'orthographe', name: 'Orthographe', weight: 2, maxScore: 20 }
+        { id: 'intro', name: 'Introduction', weight: 3 },
+        { id: 'fond', name: 'Fond / Argumentation', weight: 5 },
+        { id: 'forme', name: 'Forme / Rédaction', weight: 3 },
+        { id: 'conclusion', name: 'Conclusion', weight: 2 },
+        { id: 'orthographe', name: 'Orthographe', weight: 2 }
     ],
     exercice: [
-        { id: 'comprehension', name: 'Compréhension', weight: 4, maxScore: 20 },
-        { id: 'methode', name: 'Méthode', weight: 4, maxScore: 20 },
-        { id: 'resultat', name: 'Résultat', weight: 4, maxScore: 20 },
-        { id: 'presentation', name: 'Présentation', weight: 3, maxScore: 20 }
+        { id: 'comprehension', name: 'Compréhension', weight: 4 },
+        { id: 'methode', name: 'Méthode', weight: 4 },
+        { id: 'resultat', name: 'Résultat', weight: 4 },
+        { id: 'presentation', name: 'Présentation', weight: 3 }
     ],
     oral: [
-        { id: 'contenu', name: 'Contenu', weight: 5, maxScore: 20 },
-        { id: 'expression', name: 'Expression orale', weight: 4, maxScore: 20 },
-        { id: 'posture', name: 'Posture / Aisance', weight: 3, maxScore: 20 },
-        { id: 'temps', name: 'Gestion du temps', weight: 2, maxScore: 20 }
+        { id: 'contenu', name: 'Contenu', weight: 5 },
+        { id: 'expression', name: 'Expression orale', weight: 4 },
+        { id: 'posture', name: 'Posture / Aisance', weight: 3 },
+        { id: 'temps', name: 'Gestion du temps', weight: 2 }
     ],
     custom: []
 }
@@ -151,7 +151,10 @@ export default function SessionSetup({ onSessionCreate, onBack }) {
                                         <button
                                             key={grade}
                                             className={`grade-option ${maxGrade === grade ? 'selected' : ''}`}
-                                            onClick={() => setMaxGrade(grade)}
+                                            onClick={() => {
+                                                setMaxGrade(grade)
+                                                setCriteria(prev => prev.map(c => ({ ...c, maxScore: grade })))
+                                            }}
                                         >
                                             / {grade}
                                         </button>
