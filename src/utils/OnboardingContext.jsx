@@ -83,7 +83,7 @@ export const OnboardingProvider = ({ children }) => {
             // Delay slightly to ensure screen transition completed before speaking
             const timer = setTimeout(() => {
                 speak(steps[stepForScreen].vocal);
-            }, 500);
+            }, 100);
             return () => clearTimeout(timer);
         }
     }, [currentScreen, isActive, steps, currentStep, speak]);

@@ -75,7 +75,7 @@ export default function TourGuide() {
         };
 
         // Delay slightly to allow for transitions
-        const timer = setTimeout(updatePosition, 300);
+        const timer = setTimeout(updatePosition, 50);
         window.addEventListener('resize', updatePosition);
 
         return () => {

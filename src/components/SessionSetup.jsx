@@ -81,7 +81,7 @@ export default function SessionSetup({ onSessionCreate, onBack }) {
 
     // Validate and create session
     const handleCreateSession = () => {
-        if (isSubmitting || criteria.length < 2 || criteria.some(c => !c.name.trim())) {
+        if (isSubmitting || criteria.length < 1 || criteria.some(c => !c.name.trim())) {
             return
         }
 
@@ -294,7 +294,7 @@ export default function SessionSetup({ onSessionCreate, onBack }) {
                         </button>
                         <button
                             className="btn btn-primary btn-lg"
-                            disabled={isSubmitting || criteria.length < 2 || criteria.some(c => !c.name.trim())}
+                            disabled={isSubmitting || criteria.length < 1 || criteria.some(c => !c.name.trim())}
                             onClick={handleCreateSession}
                         >
                             <Rocket size={18} className={isSubmitting ? 'animate-pulse' : ''} />

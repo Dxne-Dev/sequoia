@@ -305,6 +305,8 @@ export default function GradingInterface({ session, students, onStudentUpdate, o
         }
     }, [currentStudent.id, generatedFeedback, calculatedGrade, currentIndex, students.length, onStudentUpdate])
 
+    const panelRef = useRef(null)
+
     // Navigation
     const goToPrevious = useCallback(() => {
         if (currentIndex > 0) {
@@ -317,6 +319,13 @@ export default function GradingInterface({ session, students, onStudentUpdate, o
             setCurrentIndex(currentIndex + 1)
         }
     }, [currentIndex, students.length])
+
+    // Auto-scroll to top when student changes
+    useEffect(() => {
+        if (panelRef.current) {
+            panelRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+        }
+    }, [currentIndex])
 
     // Keyboard navigation
     useEffect(() => {
@@ -420,7 +429,7 @@ export default function GradingInterface({ session, students, onStudentUpdate, o
                 </aside>
 
                 {/* Grading Panel */}
-                <section className="grading-panel animate-slide-in-right" key={currentStudent.id}>
+                <section ref={panelRef} className="grading-panel animate-slide-in-right" key={currentStudent.id}>
                     <div className="grading-header">
                         <div className="student-info">
                             <h2>Copie n°{currentIndex + 1}</h2>
