@@ -322,8 +322,12 @@ export default function GradingInterface({ session, students, onStudentUpdate, o
 
     // Auto-scroll to top when student changes
     useEffect(() => {
+        // Force window to top in case the entire page is scrolling
+        window.scrollTo(0, 0)
+
+        // Also scroll the internal panel
         if (panelRef.current) {
-            panelRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+            panelRef.current.scrollTo(0, 0)
         }
     }, [currentIndex])
 
