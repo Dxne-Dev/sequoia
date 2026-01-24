@@ -77,9 +77,6 @@ const AdminDashboard = ({ onLogout, onBack }) => {
                 </nav>
 
                 <div className="admin-footer">
-                    <button className="nav-item back" onClick={onBack}>
-                        <ArrowLeft size={20} /> Retour App
-                    </button>
                     <button className="nav-item logout" onClick={onLogout}>
                         <LogOut size={20} /> Déconnexion
                     </button>

@@ -251,7 +251,6 @@ function App() {
               onStart={startNewSession}
               onResume={handleResumeSession}
               onDelete={handleDeleteSession}
-              onOpenAdmin={() => setCurrentScreen('admin')}
             />
           )}
 
@@ -294,7 +293,6 @@ function App() {
 
           {currentScreen === 'admin' && (
             <AdminDashboard
-              onBack={() => setCurrentScreen('welcome')}
               onLogout={handleLogout}
             />
           )}
