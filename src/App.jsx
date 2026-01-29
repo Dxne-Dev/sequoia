@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import LandingPage from './components/LandingPage'
+import PrivacyPolicy from './components/PrivacyPolicy'
 import WelcomeScreen from './components/WelcomeScreen'
 import SessionSetup from './components/SessionSetup'
 import GradingInterface from './components/GradingInterface'
@@ -12,6 +14,7 @@ import TourGuide from './components/TourGuide'
 import './App.css'
 
 function App() {
+  const [view, setView] = useState('landing') // landing, privacy, app
   const [user, setUser] = useState(null)
   const [currentScreen, setCurrentScreen] = useState('auth') // auth, welcome, setup, grading, results
   const [currentSession, setCurrentSession] = useState(null)
@@ -22,6 +25,7 @@ function App() {
   return (
     <OnboardingProvider>
       <AppContent
+        view={view} setView={setView}
         user={user} setUser={setUser}
         currentScreen={currentScreen} setCurrentScreen={setCurrentScreen}
         currentSession={currentSession} setCurrentSession={setCurrentSession}
@@ -34,6 +38,7 @@ function App() {
 }
 
 function AppContent({
+  view, setView,
   user, setUser,
   currentScreen, setCurrentScreen,
   currentSession, setCurrentSession,
@@ -48,8 +53,14 @@ function AppContent({
     setOnboardingScreen(currentScreen)
   }, [currentScreen, setOnboardingScreen])
 
-  // Check auth and load sessions on load
+  // Check auth and load sessions only when entering the app
   useEffect(() => {
+    // Don't initialize if we're on landing or privacy page
+    if (view !== 'app') {
+      setIsLoading(false)
+      return
+    }
+
     const initApp = async () => {
       // Safety timeout: if Firestore hangs (e.g. database not created), stop loading after 5s
       const timeoutPromise = new Promise((_, reject) =>
@@ -72,6 +83,9 @@ function AppContent({
                 await loadUserSessions(savedUser.id)
                 setCurrentScreen('welcome')
               }
+            } else {
+              // No user logged in, show auth screen
+              setCurrentScreen('auth')
             }
           })(),
           timeoutPromise
@@ -85,7 +99,7 @@ function AppContent({
       }
     }
     initApp()
-  }, [])
+  }, [view])
 
   const loadUserSessions = async (userId) => {
     const sessions = await sessionService.getUserSessions(userId)
@@ -255,8 +269,21 @@ function AppContent({
     }
   }
 
+  // Handlers for view navigation
+  const handleGetStarted = () => {
+    setView('app')
+  }
+
+  const handleShowPrivacy = () => {
+    setView('privacy')
+  }
+
+  const handleBackToLanding = () => {
+    setView('landing')
+  }
+
   // Show loading screen mostly during initial auth check
-  if (isLoading && !user && currentScreen === 'auth') {
+  if (isLoading && view === 'app' && !user && currentScreen === 'auth') {
     // We can render a simple loader here if needed, or return null
     return <div className="loading-screen">Chargement...</div>
   }
@@ -272,6 +299,26 @@ function AppContent({
     </div>
   )
 
+  // Landing Page View
+  if (view === 'landing') {
+    return (
+      <LandingPage
+        onGetStarted={handleGetStarted}
+        onShowPrivacy={handleShowPrivacy}
+      />
+    )
+  }
+
+  // Privacy Policy View
+  if (view === 'privacy') {
+    return (
+      <PrivacyPolicy
+        onBack={handleBackToLanding}
+      />
+    )
+  }
+
+  // Main Application View
   return (
     <div className="app-container">
       {/* Background Ambience */}
