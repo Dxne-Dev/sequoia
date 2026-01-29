@@ -14,7 +14,11 @@ import TourGuide from './components/TourGuide'
 import './App.css'
 
 function App() {
-  const [view, setView] = useState('landing') // landing, privacy, app
+  // Initialize view based on prior usage
+  const [view, setView] = useState(() => {
+    const savedView = localStorage.getItem('sequoia_view_mode')
+    return savedView === 'app' ? 'app' : 'landing'
+  }) // landing, privacy, app
   const [user, setUser] = useState(null)
   const [currentScreen, setCurrentScreen] = useState('auth') // auth, welcome, setup, grading, results
   const [currentSession, setCurrentSession] = useState(null)
@@ -108,6 +112,9 @@ function AppContent({
 
   const handleLogin = async (userData) => {
     setUser(userData)
+    // Ensure we stay in app mode
+    localStorage.setItem('sequoia_view_mode', 'app')
+    
     if (userData.isAdmin) {
       setCurrentScreen('admin')
     } else {
@@ -131,6 +138,9 @@ function AppContent({
     setCurrentSession(null)
     setStudents([])
     setUserSessions([])
+    // Optional: if you want logout to send back to Landing Page, uncomment below:
+    // localStorage.removeItem('sequoia_view_mode')
+    // setView('landing')
   }
 
   const startNewSession = () => {
@@ -271,6 +281,7 @@ function AppContent({
 
   // Handlers for view navigation
   const handleGetStarted = () => {
+    localStorage.setItem('sequoia_view_mode', 'app')
     setView('app')
   }
 
@@ -279,6 +290,8 @@ function AppContent({
   }
 
   const handleBackToLanding = () => {
+    // Optionally clear preference if they explicitly go back to landing from privacy
+    // But usually we just go back to landing view
     setView('landing')
   }
 
