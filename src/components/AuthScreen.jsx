@@ -182,6 +182,7 @@ export default function AuthScreen({ onLogin }) {
                                     <User size={18} className="input-icon" />
                                     <input
                                         type="text"
+                                        className="input"
                                         name="firstName"
                                         placeholder="Prénom"
                                         required
@@ -192,12 +193,12 @@ export default function AuthScreen({ onLogin }) {
                                 <div className="input-field">
                                     <input
                                         type="text"
+                                        className="input"
                                         name="lastName"
                                         placeholder="Nom"
                                         required
                                         value={formData.lastName}
                                         onChange={handleChange}
-                                        style={{ paddingLeft: '1rem' }}
                                     />
                                 </div>
                             </div>
@@ -207,6 +208,7 @@ export default function AuthScreen({ onLogin }) {
                             <Mail size={18} className="input-icon" />
                             <input
                                 type="email"
+                                className="input"
                                 name="email"
                                 placeholder="Email professionnel"
                                 required
@@ -221,10 +223,10 @@ export default function AuthScreen({ onLogin }) {
                                     <BookOpen size={18} className="input-icon" />
                                     <select
                                         name="subject"
+                                        className="input"
                                         required
                                         value={showCustomSubject ? 'Saisissez votre matière' : formData.subject}
                                         onChange={handleChange}
-                                        className={!formData.subject && !showCustomSubject ? 'placeholder-color' : ''}
                                     >
                                         <option value="" disabled>Matière enseignée</option>
                                         {subjects.map(s => (
@@ -238,6 +240,7 @@ export default function AuthScreen({ onLogin }) {
                                         <Plus size={18} className="input-icon" />
                                         <input
                                             type="text"
+                                            className="input"
                                             placeholder="Nom de votre matière"
                                             required
                                             value={customSubject}
@@ -253,6 +256,7 @@ export default function AuthScreen({ onLogin }) {
                             <Lock size={18} className="input-icon" />
                             <input
                                 type="password"
+                                className="input"
                                 name="password"
                                 placeholder="Mot de passe"
                                 required
@@ -266,6 +270,7 @@ export default function AuthScreen({ onLogin }) {
                                 <Lock size={18} className="input-icon" />
                                 <input
                                     type="password"
+                                    className="input"
                                     name="confirmPassword"
                                     placeholder="Confirmer le mot de passe"
                                     required
@@ -275,7 +280,7 @@ export default function AuthScreen({ onLogin }) {
                             </div>
                         )}
 
-                        <button type="submit" className="btn btn-primary btn-block auth-submit" disabled={isLoading}>
+                        <button type="submit" className="btn btn-primary auth-submit" disabled={isLoading}>
                             {isLoading ? (
                                 <Loader2 size={20} className="spinning" />
                             ) : (
@@ -305,7 +310,7 @@ export default function AuthScreen({ onLogin }) {
                             ))}
                         </div>
 
-                        <button type="submit" className="btn btn-primary btn-block auth-submit" disabled={isLoading || otp.join('').length < 6}>
+                        <button type="submit" className="btn btn-primary auth-submit" disabled={isLoading || otp.join('').length < 6}>
                             {isLoading ? (
                                 <Loader2 size={20} className="spinning" />
                             ) : (

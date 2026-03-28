@@ -128,7 +128,7 @@ export const authService = {
             if (error.code === 'auth/invalid-credential') throw new Error('Email ou mot de passe incorrect.')
             if (error.code === 'auth/user-not-found') throw new Error('Aucun compte trouvé avec cet email.')
             if (error.code === 'auth/wrong-password') throw new Error('Mot de passe incorrect.')
-            throw new Error('Erreur de connexion.')
+            throw new Error(`Erreur de connexion : ${error.message || error.code || 'Erreur inconnue'}`)
         }
     },
 
