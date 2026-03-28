@@ -140,13 +140,12 @@
 /* Grading Panel */
 .grading-panel {
     flex: 1;
-    padding: 3rem;
+    padding: 3rem 10%;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 3rem;
-    max-width: 900px;
-    margin: 0 auto;
+    min-height: 0;
 }
 
 .grading-header {
