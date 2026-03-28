@@ -450,9 +450,14 @@ export default function GradingInterface({ session, students, onStudentUpdate, o
                             />
                         </div>
                         <div className="calculated-grade">
-                            <span className="grade-label">Note calculée</span>
-                            <span className="grade-value">{calculatedGrade}</span>
-                            <span className="grade-max">/ {session.maxGrade}</span>
+                            <div className="grade-header-pill">
+                                <Sparkles size={12} fill="currentColor" />
+                                <span className="grade-label">Note estimée</span>
+                            </div>
+                            <div className="grade-display">
+                                <span className="grade-value">{calculatedGrade}</span>
+                                <span className="grade-max">/ {session.maxGrade}</span>
+                            </div>
                         </div>
                     </div>
 
