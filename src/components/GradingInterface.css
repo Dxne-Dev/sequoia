@@ -149,7 +149,7 @@
 /* Grading Panel */
 .grading-panel {
     flex: 1;
-    padding: 1.5rem 5%; /* Much more compact padding */
+    padding: 1rem 3%; /* Un peu plus de largeur disponible */
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -214,11 +214,11 @@
     opacity: 0.6;
 }
 
-/* Criteria & Sliders - 2 STACKED COLUMNS if possible */
+/* Criteria & Sliders - ONE PER LINE */
 .criteria-sliders {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem; /* Gap encore plus réduit pour tout voir */
 }
 
 .criterion-slider {
