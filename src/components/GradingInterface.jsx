@@ -382,13 +382,13 @@ export default function GradingInterface({ session, students, onStudentUpdate, o
                 </div>
 
                 <div className="progress-container">
-                    <span className="progress-text">{completedCount} / {students.length} copies</span>
                     <div className="progress-bar">
                         <div
                             className="progress-fill"
                             style={{ width: `${(completedCount / students.length) * 100}%` }}
                         ></div>
                     </div>
+                    <span className="progress-text">{completedCount} / {students.length} copies terminées</span>
                 </div>
 
                 <div className="top-bar-actions">
@@ -463,7 +463,7 @@ export default function GradingInterface({ session, students, onStudentUpdate, o
                                 <div className="slider-header">
                                     <span className="slider-label">{criterion.name}</span>
                                     <span className={`slider-value score-${getScoreLevel(currentStudent.scores[criterion.id] || 0)}`}>
-                                        {currentStudent.scores[criterion.id] || 0}/{session.maxGrade}
+                                        {currentStudent.scores[criterion.id] || 0} <span className="slider-max-small">/ {criterion.maxScore}</span>
                                     </span>
                                 </div>
                                 <div className="slider-track-container">
@@ -471,14 +471,14 @@ export default function GradingInterface({ session, students, onStudentUpdate, o
                                         type="range"
                                         className="slider"
                                         min="0"
-                                        max={session.maxGrade}
-                                        step={session.maxGrade > 20 ? 1 : 0.5}
+                                        max={criterion.maxScore}
+                                        step={criterion.maxScore > 10 ? 1 : 0.5}
                                         value={currentStudent.scores[criterion.id] || 0}
                                         onChange={(e) => handleScoreChange(criterion.id, e.target.value)}
                                     />
                                     <div
                                         className={`slider-fill score-${getScoreLevel(currentStudent.scores[criterion.id] || 0)}`}
-                                        style={{ width: `${((currentStudent.scores[criterion.id] || 0) / session.maxGrade) * 100}%` }}
+                                        style={{ width: `${((currentStudent.scores[criterion.id] || 0) / criterion.maxScore) * 100}%` }}
                                     ></div>
                                 </div>
                                 <div className="slider-labels">
