@@ -341,9 +341,63 @@
     background: #F8FAFC;
 }
 
+/* Feedback Modal Specific Content */
+.feedback-textarea {
+    min-height: 180px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    padding: var(--space-md);
+    resize: vertical;
+}
+
+.grade-adjustment {
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    background: #F8FAFC;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--color-border);
+}
+
+.grade-adjustment-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+}
+
+.grade-input-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.final-grade {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    min-width: 80px;
+    text-align: center;
+}
+
+.ai-error-warning, .coherence-warning {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-md);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.ai-error-warning { background: #FEF2F2; color: #B91C1C; }
+.coherence-warning { background: #FFFBEB; color: #B45309; }
+
 /* Footer - More compact */
 .grading-footer {
-    height: 60px; /* Reduced from 80px */
+    height: 60px;
     background: white;
     border-top: 1px solid var(--color-border);
     padding: 0 1.5rem;
